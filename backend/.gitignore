@@ -1,0 +1,5 @@
+node_modules
+dist
+Note.txt
+.env
+.env.e2e
