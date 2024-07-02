@@ -12,7 +12,7 @@ const app=express()
 
 //database connection
 mongoose.connect(process.env.MONGO_CONNECTION_STRING as string)
-.then(()=>console.log("MongoDB Connected"))
+.then(()=>console.log("MongoDB Connected",process.env.MONGO_CONNECTION_STRING))
 .catch((err)=>console.log(err))
 
 app.use(express.json())
