@@ -4,11 +4,20 @@ import "dotenv/config"
 import mongoose from "mongoose"
 import userRouter from './routes/users'
 import authRouter from "./routes/auth"
+import myHotelRouter from "./routes/my-hotels"
 import cookieParser from "cookie-parser"
 import path from "path"
+import {v2 as cloudinary} from "cloudinary"
 
+cloudinary.config({
+    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET
+})
 
 const app=express()
+
+
 
 //database connection
 mongoose.connect(process.env.MONGO_CONNECTION_STRING as string)
@@ -26,6 +35,7 @@ app.use(cors({
 app.use(express.static(path.join(__dirname,"../../frontend/dist")))
 app.use('/api/user',userRouter)
 app.use('/api/auth',authRouter)
+app.use('/api/my-hotels',myHotelRouter)
 
 // app.get("/api/test",async(req:Request,res:Response)=>{
 // res.json({msg:"Hello From the test endpoint"})
