@@ -17,7 +17,7 @@ const upload = multer({
 });
 
 router.post(
-  "/my-hotels",
+  "/",
   verifyToken,
   [
     body("name").notEmpty().withMessage("Name is required"),
@@ -33,7 +33,6 @@ router.post(
       .notEmpty()
       .isArray()
       .withMessage("Facilities are required"),
-    
   ],
   upload.array("imageFiles", 6),
   async (req: Request, res: Response) => {
@@ -41,17 +40,7 @@ router.post(
       const imageFiles = req.files as Express.Multer.File[];
       const newHotel: HotelType = req.body;
 
-      // upload the image to cloudinary
-      const uploadPromises = imageFiles.map(async (image) => {
-        const b64 = Buffer.from(image.buffer).toString();
-        console.log("b64", b64);
-        let dataURI = "data:" + image.mimetype + ";base64," + b64;
-        console.log("dataURI", dataURI);
-        const res = await cloudinary.v2.uploader.upload(dataURI);
-        return res.url;
-      });
-      const imageUrls = await Promise.all(uploadPromises);
-      console.log(imageUrls);
+      const imageUrls = await uploadImages(imageFiles);
 
       newHotel.imageUrls = imageUrls;
       newHotel.lastUpdated = new Date();
@@ -68,5 +57,18 @@ router.post(
     }
   }
 );
+
+async function uploadImages(imageFiles: Express.Multer.File[]) {
+  // upload the image to cloudinary
+  const uploadPromises = imageFiles.map(async (image) => {
+    const b64 = Buffer.from(image.buffer).toString("base64");
+    let dataURI = "data:" + image.mimetype + ";base64," + b64; //Need to figure out
+    const res = await cloudinary.v2.uploader.upload(dataURI);
+    return res.url;
+  });
+  const imageUrls = await Promise.all(uploadPromises);
+
+  return imageUrls;
+}
 
 export default router;
