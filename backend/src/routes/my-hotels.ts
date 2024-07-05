@@ -7,10 +7,10 @@ import { body } from "express-validator";
 
 const router = express.Router();
 
-const storage = multer.memoryStorage();
+const storage = multer.memoryStorage(); // store the image in memory as a buffer 
 
 const upload = multer({
-  storage: storage,
+  storage: storage, 
   limits: {
     fileSize: 5 * 1024 * 1024, //5MB
   },
@@ -40,6 +40,7 @@ router.post(
       const imageFiles = req.files as Express.Multer.File[];
       const newHotel: HotelType = req.body;
 
+      // upload the image to cloudinary
       const imageUrls = await uploadImages(imageFiles);
 
       newHotel.imageUrls = imageUrls;

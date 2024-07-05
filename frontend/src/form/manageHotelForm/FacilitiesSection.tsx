@@ -12,7 +12,7 @@ const FacilitiesSection = () => {
       <div className="grid grid-cols-5 gap-3">
       {
         hotelFacilities.map((facility)=>(
-            <label htmlFor="" className="flex gap-1 text-gray-700 items-center" key={facility}>
+            <label htmlFor={facility} className="flex gap-1 text-gray-700 items-center" key={facility}>
               <input type="checkbox" {...register("facilities",{
                  validate:(facilities)=>{
                     if(facilities && facilities.length>0){
@@ -21,8 +21,8 @@ const FacilitiesSection = () => {
                       return "At least one facility is required"
                     }
                  }
-              })} value={facility} />
-              <span>{facility}</span>
+              })} value={facility} id={facility} />
+              {facility}
             </label>
         ))
       }
