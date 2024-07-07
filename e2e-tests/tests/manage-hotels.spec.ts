@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { describe } from "node:test";
 import path from "path";
 
 
@@ -47,3 +48,31 @@ await page.getByRole("button",{name:"Save"}).click();
 
 await expect(page.getByText("Hotel Saved!")).toBeVisible()
 });
+
+
+test("should display hotels",async({page})=>{
+await page.goto(`${UI_URL}my-hotels`);
+
+await expect(page.getByText("My Hotels")).toBeVisible();
+
+await expect(page.getByText("Test Hotel")).toBeVisible();
+
+// await expect(page.locator(':has-text("This is a description")')).toBeVisible();
+await expect(page.getByText("This is a description")).toBeVisible();
+
+
+await expect(page.getByText("Test city, Test country")).toBeVisible();
+
+await expect(page.getByText("Budget")).toBeVisible();
+
+await expect(page.getByText("100 per night")).toBeVisible();
+
+await expect(page.getByText("2 adults, 1 children")).toBeVisible();
+
+await expect(page.getByText("3 Star Rating")).toBeVisible();
+
+
+await page.getByRole("link",{name:"View Hotel"}).click()
+
+
+})
