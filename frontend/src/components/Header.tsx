@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <div className=" bg-blue-800 py-6">
-      <div className="container mx-auto flex justify-between">
+      <div className="container  mx-auto flex justify-between ">
         {/* tracking-tight */}
         <span className=" text-3xl text-white font-bold tracking-tight">
           <Link to={"/"}>MernHolidays.com</Link>
@@ -25,7 +25,7 @@ export default function Header() {
                 My Bookings
               </Link>
               <Link
-                to={"myHotels"}
+                to={"my-hotels"}
                className="flex items-center text-white  px-3 font-bold hover:opacity-95 cursor-pointer"
               >
                 My Hotels

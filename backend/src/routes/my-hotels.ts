@@ -59,6 +59,16 @@ router.post(
   }
 );
 
+
+router.get('/',verifyToken,async(req:Request,res:Response)=>{
+  try{
+    const hotels=await Hotel.find({userId:req.userId})
+    res.json(hotels)  
+  }catch(err){
+    res.status(500).json({msg:"Error fetching hotels"})
+  }
+})
+
 async function uploadImages(imageFiles: Express.Multer.File[]) {
   // upload the image to cloudinary
   const uploadPromises = imageFiles.map(async (image) => {
