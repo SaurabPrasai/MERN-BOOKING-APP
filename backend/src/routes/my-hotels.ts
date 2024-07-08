@@ -94,7 +94,7 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
 
 router.put('/:id',verifyToken,upload.array("imageFiles",6),async(req:Request,res:Response)=>{
   const id = req.params.id
-  console.log(id)
+  // console.log(id)
 try {
   // console.log(req.body)
   const imageFiles = req.files as Express.Multer.File[];

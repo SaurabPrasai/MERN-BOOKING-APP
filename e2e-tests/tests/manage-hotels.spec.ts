@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 
   await page.locator("[name=email]").fill("saurab@gmail.com");
 
-  await page.locator("[name=password]").fill("saurab");
+  await page.locator("[name=password]").fill("123456");
 
   await page.getByRole("button", { name: "Login" }).click();
 
@@ -73,6 +73,39 @@ await expect(page.getByText("3 Star Rating")).toBeVisible();
 
 
 await page.getByRole("link",{name:"View Hotel"}).click()
+
+
+})
+
+
+test("Should allow user to edit a hotel",async({page})=>{
+  await page.goto(`${UI_URL}my-hotels`)
+
+  await expect(page.getByText("My Hotels")).toBeVisible();
+
+  await expect(page.getByText("Damak").first()).toBeVisible()
+
+  await page.getByRole("link",{name:"View Hotel"}).click()
+
+  await expect(page.getByText("Add Hotel")).toBeVisible();   
+
+  // await page.locator("[name=name]").fill("Test Hotel");
+  await page.locator("[name=country]").fill("Test country");
+
+
+  // await page.getByRole("button",{name:"delete"}).nth(0).click()
+  await page.getByRole("button",{name:"delete"}).nth(1).click()
+
+
+  // await page.setInputFiles("[name=imageFiles]",[
+  //   path.join(__dirname, "files", "1.jpg"),
+  //   path.join(__dirname, "files", "2.jpg")
+  // ])
+
+await page.getByRole("button",{name:"Save"}).click();
+
+await expect(page.getByText("Hotel Updated!")).toBeVisible()
+
 
 
 })
