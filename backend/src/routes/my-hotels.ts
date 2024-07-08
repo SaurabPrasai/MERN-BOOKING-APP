@@ -7,10 +7,10 @@ import { body } from "express-validator";
 
 const router = express.Router();
 
-const storage = multer.memoryStorage(); // store the image in memory as a buffer 
+const storage = multer.memoryStorage(); // store the image in memory as a buffer
 
 const upload = multer({
-  storage: storage, 
+  storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024, //5MB
   },
@@ -59,15 +59,14 @@ router.post(
   }
 );
 
-
-router.get('/',verifyToken,async(req:Request,res:Response)=>{
-  try{
-    const hotels=await Hotel.find({userId:req.userId})
-    res.json(hotels)  
-  }catch(err){
-    res.status(500).json({msg:"Error fetching hotels"})
+router.get("/", verifyToken, async (req: Request, res: Response) => {
+  try {
+    const hotels = await Hotel.find({ userId: req.userId });
+    res.json(hotels);
+  } catch (err) {
+    res.status(500).json({ msg: "Error fetching hotels" });
   }
-})
+});
 
 async function uploadImages(imageFiles: Express.Multer.File[]) {
   // upload the image to cloudinary
@@ -81,5 +80,48 @@ async function uploadImages(imageFiles: Express.Multer.File[]) {
 
   return imageUrls;
 }
+
+router.get("/:id", verifyToken, async (req: Request, res: Response) => {
+  const id = req.params.id.toString();
+  try {
+    const hotel = await Hotel.findById({ _id: id, userId: req.userId });
+    res.status(200).json(hotel);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching hotel" });
+  }
+});
+
+
+router.put('/:id',verifyToken,upload.array("imageFiles",6),async(req:Request,res:Response)=>{
+  const id = req.params.id
+  console.log(id)
+try {
+  // console.log(req.body)
+  const imageFiles = req.files as Express.Multer.File[];
+  const updatedHotel: HotelType = req.body;
+  updatedHotel.lastUpdated=new Date()
+
+
+  // upload the image to cloudinary
+  const updateImageUrls = await uploadImages(imageFiles);
+
+
+  const hotel=await Hotel.findOneAndUpdate({_id:id,userId:req.userId},updatedHotel,{new:true})
+
+  if(!hotel){
+    return res.status(404).json({msg:"Hotel not found"})
+  }
+
+  hotel.imageUrls=[...updateImageUrls,...(updatedHotel.imageUrls || [])] //again need to figure out
+
+
+  await hotel.save()
+
+  res.status(201).json(hotel)
+  
+} catch (error) {
+  console.log(error)
+}
+})
 
 export default router;
