@@ -5,6 +5,7 @@ import mongoose from "mongoose"
 import userRouter from './routes/users'
 import authRouter from "./routes/auth"
 import myHotelRouter from "./routes/my-hotels"
+import hotelRouter from "./routes/hotel"
 import cookieParser from "cookie-parser"
 import path from "path"
 import {v2 as cloudinary} from "cloudinary"
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname,"../../frontend/dist")))
 app.use('/api/user',userRouter)
 app.use('/api/auth',authRouter)
 app.use('/api/my-hotels',myHotelRouter)
+app.use('/api/hotels',hotelRouter)
 
 // app.get("/api/test",async(req:Request,res:Response)=>{
 // res.json({msg:"Hello From the test endpoint"})
